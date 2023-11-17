@@ -7,11 +7,15 @@ import { selectUserName } from '../redux/authSlice';
 import ProfilePic from './profilepic';
 import Posts from './posts';
 
-const CreatePost: React.FC = () => {
+interface CreatePostProps {
+
+}
+
+const CreatePost: React.FC<CreatePostProps> = () => {
   const user = useAppSelector(selectUserName);
   const [postText, setPostText] = useState<string>('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [imageURL, setImageURL] = useState<string>('');
+  const [imageURL, setImageURL] = useState<string>(''); // Updated to an empty string for better typing
   const [createPostWithImage] = useCreatePostWithImageMutation();
   const [createPost] = useCreatePostMutation();
 
@@ -20,7 +24,7 @@ const CreatePost: React.FC = () => {
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0] || null
     setSelectedFile(file);
 
     const reader = new FileReader();
@@ -47,7 +51,7 @@ const CreatePost: React.FC = () => {
         const base64str = await convertFileToBase64(selectedFile);
         console.log("Base64 String:", base64str);
 
-        result = await createPostWithImage({ username: user.name, base64str: base64str, post: postText });
+        result = await createPostWithImage({ username: user.name, base64str, post: postText });
       } else {
         result = await createPost({ username: user.name, post: postText });
       }
