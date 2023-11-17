@@ -1,4 +1,5 @@
 "use client";
+// @ts-nocheck
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -11,21 +12,21 @@ import { useAppDispatch } from "../hooks";
 import { setUser } from "../redux/authSlice";
 import Spinner from "../components/spinner";
 
-const Login: React.FC = () => {
+const Login = () => {
   const dispatch = useAppDispatch();
   const [user, setuser] = useState({
-    username: "",
-    password: "",
+    username:"",
+ password:""
   });
   const [loading, setLoading] = useState(false);
-  const [authError, setAuthError] = useState<string>("");
-  const router = useRouter();
+  const [authError, setAuthError] = useState("");
+  const router = useRouter()
 
   const [loginUser] = useLoginUserMutation();
   const [registerUser] = useRegisterUserMutation();
   const [errorPresent, setErrorPresent] = useState(false);
 
-  const handleLoginAuth = async (e: React.FormEvent<HTMLButtonElement>) => {
+  const handleLoginAuth = async (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -37,7 +38,9 @@ const Login: React.FC = () => {
           setAuthError(resultLogin.data.message);
           setErrorPresent(true);
           console.log("API Response:", resultLogin.data);
-        } else {
+        } 
+        
+        else {
           console.log("Unexpected API Response:", resultLogin);
         }
       }
@@ -46,13 +49,13 @@ const Login: React.FC = () => {
     } finally {
       setLoading(false);
       dispatch(setUser({ name: user.username }));
+
     }
   };
+  useEffect(()=>{
+    authError == "Login Successful" && setTimeout(()=>router.push("/feed"), 500)
 
-  useEffect(() => {
-    authError === "Login Successful" && setTimeout(() => router.push("/feed"), 500);
-  }, [authError, router]);
-
+  },[authError])
   return (
     <div
       className={`h-screen grid items-center`}
@@ -67,8 +70,8 @@ const Login: React.FC = () => {
         <h1 className="text-2xl text-center font-bold text-red-500">Login</h1>
         {authError && (
           <p
-            className={`${authError === "Incrorrect Login Details" ? "bg-red-300" : "bg-green-300"} rounded-xl text-white text-sm w-fit m-auto p-2 ${
-              errorPresent && authError === "Incrorrect Login Details" ? "shake-animation" : ""
+            className={`${authError == "Incrorrect Login Details" ? "bg-red-300": "bg-green-300"} rounded-xl text-white text-sm w-fit m-auto p-2 ${
+              (errorPresent && authError == "Incrorrect Login Details") ? "shake-animation" : ""
             }`}
           >
             {authError}
