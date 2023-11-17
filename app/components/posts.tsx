@@ -58,7 +58,7 @@ const Posts: React.FC = () => {
       <div className="flex flex-col gap-4">
         {post &&
           post.map((post, idx) => (
-            <div key={idx} className="bg-white w-full px-4 py-2 rounded-xl" key={post.id}>
+            <div key={idx} className="bg-white w-full px-4 py-2 rounded-xl">
               <div className="p-2">
                 <p className="font-bold text-gray-700 text-sm">{post.username.split("@")[0]}</p>
                 <p className="text-xs text-gray-300">{post.username}</p>
